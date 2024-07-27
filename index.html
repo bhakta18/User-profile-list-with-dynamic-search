@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>User Profiles</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f0f0f0;
+        }
+
+        .app-container {
+            background: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            max-width: 600px;
+            width: 100%;
+        }
+
+        .search-bar {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 20px;
+            border: 2px solid #ccc;
+            border-radius: 5px;
+        }
+
+        .user-profile {
+            display: flex;
+            align-items: center;
+            padding: 10px;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .user-profile:last-child {
+            border-bottom: none;
+        }
+
+        .user-avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            margin-right: 20px;
+        }
+
+        .user-details {
+            flex: 1;
+        }
+
+        .user-name {
+            font-size: 18px;
+            font-weight: bold;
+        }
+
+        .user-email {
+            color: #555;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="root"></div>
+    <script src="https://www.unpkg.com/react@18.2.0/umd/react.development.js"></script>
+    <script src="https://www.unpkg.com/react-dom@18.2.0/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <script type="text/babel">
+        const { useState, useMemo } = React;
+
+        const UserProfile = ({ user }) => (
+            <div className="user-profile">
+                <img className="user-avatar" src={user.avatar} alt={`${user.name}'s avatar`} />
+                <div className="user-details">
+                    <div className="user-name">{user.name}</div>
+                    <div className="user-email">{user.email}</div>
+                </div>
+            </div>
+        );
+
+        const App = () => {
+            const [searchTerm, setSearchTerm] = useState('');
+            const users = [
+                { name: 'John Doe', email: 'john.doe@example.com', avatar: 'https://via.placeholder.com/50' },
+                { name: 'Jane Smith', email: 'jane.smith@example.com', avatar: 'https://via.placeholder.com/50' },
+                { name: 'Alice Johnson', email: 'alice.johnson@example.com', avatar: 'https://via.placeholder.com/50' },
+                { name: 'Bob Brown', email: 'bob.brown@example.com', avatar: 'https://via.placeholder.com/50' }
+            ];
+
+            const filteredUsers = useMemo(() =>
+                users.filter(user =>
+                    user.name.toLowerCase().includes(searchTerm.toLowerCase())
+                ), [searchTerm, users]);
+
+            return (
+                <div className="app-container">
+                    <input
+                        type="text"
+                        className="search-bar"
+                        placeholder="Search by name..."
+                        value={searchTerm}
+                        onChange={e => setSearchTerm(e.target.value)}
+                    />
+                    {filteredUsers.map((user, index) => (
+                        <UserProfile key={index} user={user} />
+                    ))}
+                </div>
+            );
+        };
+
+        ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+    </script>
+</body>
+
+</html>
